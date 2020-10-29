@@ -6,6 +6,8 @@ const Search = () => {
   const [results, setResults] = useState([]);
 
   // console.log(results);
+
+  // useEffect hook will execute any time search term changes
   useEffect(() => {
     // declare helper function
     const search = async() => {
@@ -21,15 +23,37 @@ const Search = () => {
 
       setResults(data.query.search);
     };
-    // check there is a term to search before running
-    if(term){
+
+    // detect if first time rendered
+    if(term && !results.length){
       search();
     }
-  }, [term]);
+    else {
+      // in 1000ms check there is a term to search before running
+      const timeoutId = setTimeout(() => {
+        if(term){
+          search();
+        }
+      }, 1000);
+
+      // return cleanup function to reset timeout
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  },[term]);
 
   const renderedResults = results.map((result) =>{
     return(
       <div key={ result.pageid } className="item">
+        <div className="right floated content">
+          <a
+            className="ui button"
+            href={`https://en.wikipedia.org?curid=${result.pageid}`}
+          >
+            Go
+          </a>
+        </div>
         <div className="content">
           <div className="header">{result.title}</div>
           <span dangerouslySetInnerHTML={{ __html: result.snippet}}></span>

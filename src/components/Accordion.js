@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const Accordion = ( {items} ) =>{
+  // array destructuring
   // initialize new piece of state
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -10,6 +11,10 @@ const Accordion = ( {items} ) =>{
   };
 
   const renderedItems = items.map((item, index) => {
+
+    // determine if item is active, if true assign to variable which is then 
+    // used in the classname for the div
+
     const active = index === activeIndex ? 'active' : '';
     return (
       <React.Fragment key={item.title}>
@@ -17,8 +22,7 @@ const Accordion = ( {items} ) =>{
           className={`title ${active}`}
           onClick={() => onTitleClick(index)}
         >
-          <i className="dropdown icon"></i>
-          {item.title}
+          <i className="dropdown icon"></i>{item.title}
         </div>
         <div className={`content ${active}`}>
           <p>{item.content}</p>
